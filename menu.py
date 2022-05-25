@@ -111,13 +111,28 @@ class Menu:
             print(WRONG_INPUT)
             sleep(1)
             self._editPathMenu()
-        try:
-            self.edit_path_menu[user_input]()
-        except KeyError:
-            self.__clear()
-            print(WRONG_INPUT)
-            sleep(1)
-            self._editPathMenu()
+        if user_input == 1:
+            self.data.update(
+                {
+                    'HOTLINE':askFilePath('HOTLINE')
+                }
+            )
+        elif user_input == 2:
+            self.data.update(
+                {
+                    'PN': askFilePath('PN')
+                }
+            )
+        elif user_input == 3:
+            self.data.update(
+                {
+                    'NADAVI': askFilePath('NADAVI')
+                }
+            )
+        elif not user_input:
+            self._settingsMenu()
+        dumpDataToSettings(self.data)
+        self._settingsMenu()
 
     def _checkFilePath(self) -> None:
         self.__clear()
@@ -140,6 +155,10 @@ if __name__ == '__main__':
         pass
     else:
         os.mkdir('logs')
+    if os.path.exists('Отчеты'):
+        pass
+    else:
+        os.mkdir('Отчеты')
     try:
         app = Menu()
     except Exception as error:
