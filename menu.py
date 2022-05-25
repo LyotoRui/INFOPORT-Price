@@ -10,36 +10,30 @@ from misc.templates import *
 
 class Menu:
     def __init__(self) -> None:
-        self.__label = Figlet(font='slant').renderText('PRICE CHECKER')
-        self.main_menu = {
-            1: self._checkMenu,
-            2: self._settingsMenu,
-            3: self.__exit
-        }
+        self.__label = Figlet(font="slant").renderText("PRICE CHECKER")
+        self.main_menu = {1: self._checkMenu, 2: self._settingsMenu, 3: self.__exit}
         self.check_menu = {
             0: self._mainMenu,
             1: checkHotline,
             2: checkPn,
-            3: checkNadavi
+            3: checkNadavi,
         }
         self.settings_menu = {
             0: self._mainMenu,
             1: self._checkFilePath,
-            2: self._editPathMenu
+            2: self._editPathMenu,
         }
-        self.edit_path_menu = {
-            0: self._settingsMenu
-        }
+        self.edit_path_menu = {0: self._settingsMenu}
         self.data = loadDataFromFile()
-        self._mainMenu()   
+        self._mainMenu()
 
     def __clear(self) -> None:
-        os.system('cls')
+        os.system("cls")
         print(self.__label)
-    
+
     def __exit(self) -> None:
         self.__clear()
-        print('Закрываемся...')
+        print("Закрываемся...")
         sleep(1)
         sys.exit()
 
@@ -59,7 +53,7 @@ class Menu:
             print(WRONG_INPUT)
             sleep(1)
             self._mainMenu()
-    
+
     def _checkMenu(self) -> None:
         self.__clear()
         try:
@@ -112,23 +106,11 @@ class Menu:
             sleep(1)
             self._editPathMenu()
         if user_input == 1:
-            self.data.update(
-                {
-                    'HOTLINE':askFilePath('HOTLINE')
-                }
-            )
+            self.data.update({"HOTLINE": askFilePath("HOTLINE")})
         elif user_input == 2:
-            self.data.update(
-                {
-                    'PN': askFilePath('PN')
-                }
-            )
+            self.data.update({"PN": askFilePath("PN")})
         elif user_input == 3:
-            self.data.update(
-                {
-                    'NADAVI': askFilePath('NADAVI')
-                }
-            )
+            self.data.update({"NADAVI": askFilePath("NADAVI")})
         elif not user_input:
             self._settingsMenu()
         dumpDataToSettings(self.data)
@@ -138,33 +120,29 @@ class Menu:
         self.__clear()
         for path in self.data.keys():
             try:
-                with open(self.data[path], 'r') as file:
+                with open(self.data[path], "r") as file:
                     file.close()
-                    print(
-                        path, SYMBOLS[True], sep=' -- '
-                    )
+                    print(path, SYMBOLS[True], sep=" -- ")
             except FileNotFoundError:
-                print(path, SYMBOLS[False], sep=' -- ')
+                print(path, SYMBOLS[False], sep=" -- ")
             sleep(0.5)
-        user_confirm = input('Нажмите Enter что-бы продолжить...')
+        user_confirm = input("Нажмите Enter что-бы продолжить...")
         self._settingsMenu()
 
 
-if __name__ == '__main__':
-    if os.path.exists('logs'):
+if __name__ == "__main__":
+    if os.path.exists("logs"):
         pass
     else:
-        os.mkdir('logs')
-    if os.path.exists('Отчеты'):
+        os.mkdir("logs")
+    if os.path.exists("Отчеты"):
         pass
     else:
-        os.mkdir('Отчеты')
+        os.mkdir("Отчеты")
     try:
         app = Menu()
     except Exception as error:
         logError(error=error)
-        print('Произошла ошибка')
+        print("Произошла ошибка")
         sleep(0.5)
         app = Menu()
-
-
