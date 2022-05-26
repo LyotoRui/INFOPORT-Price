@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 from time import sleep
 from pandas import read_excel
-from misc.templates import HEADERS
+from misc.templates import HEADERS, SYMBOLS
 import requests
 from progress.bar import ShadyBar
 import csv
@@ -10,8 +10,8 @@ from win32ui import CreateFileDialog
 
 
 def logError(error: str) -> None:
-    timestamp = str(datetime.now())
-    with open(f"log\{timestamp}.txt", "w") as file:
+    timestamp = str(datetime.now().strftime("%b-%d-%Y-%H-%M-%S"))
+    with open(f"logs/{timestamp}.txt", "w") as file:
         file.write(error)
         file.close()
 
@@ -29,7 +29,13 @@ def loadDataFromFile() -> dict:
             settings_file.close()
             return data
     except FileNotFoundError or json.JSONDecodeError:
-        dumpDataToSettings()
+        dumpDataToSettings(
+            {
+                'HOTLINE': '',
+                'PN': '',
+                'NADAVI': ''
+            }
+        )
 
 
 def dumpDataToSettings(data: dict) -> None:
@@ -41,6 +47,16 @@ def dumpDataToSettings(data: dict) -> None:
         }
         json.dump(data, settings_file)
         settings_file.close()
+
+
+def checkAll(path: dict) -> bool:
+    if checkHotline(path):
+        print(f'Hotline - {SYMBOLS[True]}')
+    if checkPn(path):
+        print(f'PN - {SYMBOLS[True]}')
+    if checkNadavi(path):
+        print(f'Nadavi - {SYMBOLS[True]}')
+    return True
 
 
 def checkHotline(path: dict) -> bool:

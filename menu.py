@@ -14,9 +14,10 @@ class Menu:
         self.main_menu = {1: self._checkMenu, 2: self._settingsMenu, 3: self.__exit}
         self.check_menu = {
             0: self._mainMenu,
-            1: checkHotline,
-            2: checkPn,
-            3: checkNadavi,
+            1: checkAll,
+            2: checkHotline,
+            3: checkPn,
+            4: checkNadavi,
         }
         self.settings_menu = {
             0: self._mainMenu,
@@ -142,7 +143,7 @@ if __name__ == "__main__":
     try:
         app = Menu()
     except Exception as error:
-        logError(error=error)
+        logError(error=str(error))
         print("Произошла ошибка")
         sleep(0.5)
         app = Menu()
